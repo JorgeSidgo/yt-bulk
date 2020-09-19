@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+  <link rel="stylesheet" href="main.css">
+  <script src="vue.min.js"></script>
+  <title>YT-blk</title>
+</head>
+
+<body>
+  <div id="app">
+
+    <div class="header">
+      <h2><i class="red">YT</i>-blk</h2>
+    </div>
+
+    <div class="inner-container">
+      <div class="form">
+        <div v-if="showOverlay" id="overlay" class="overlay">
+          <div class="spinner">
+
+          </div>
+        </div>
+        <label for="">Seleccione el archivo:</label>
+        <input id="input" type="file">
+        <button v-on:click="startRecognition()" id="furro">Procesar</button>
+      </div>
+
+      <span v-if="message != null" class="info"><i>{{message}}</i></span>
+
+      <table v-if="list.length > 0" border="1" class="table">
+        <tr>
+          <th>Link</th>
+          <th>Titulo</th>
+          <th>Estado</th>
+        </tr>
+        <tr v-for="item in list">
+          <td>{{ item.link }}</td>
+          <td>{{ item.title }}</td>
+          <td>{{item.status}}</td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+</body>
+<script src="linkers/recognition.js"></script>
+<script src="linkers/download.js"></script>
+<script src="linkers/convert.js"></script>
+<script>
+  var vueapp = new Vue({
+    el: '#app',
+    data: {
+      message: null,
+      showOverlay: false,
+      route: null,
+      list: []
+    },
+
+    methods: {
+      pushData(data) {
+        console.log(data)
+
+        this.list = [];
+
+        data.forEach(element => {
+          this.list.push(JSON.parse(element));
+        });
+
+        console.log(this.list);
+        this.toggleOverlay();
+
+      },
+      toggleOverlay() {
+        this.showOverlay = !this.showOverlay;
+      },
+      getRoute() {
+        return this.route;
+      },
+      setRoute(param) {
+        this.route = param;
+      },
+      setMessage(param) {
+        this.message = param;
+      },
+      startRecognition() {
+        getResponse();
+      },
+      startDownload() {
+        getDownload(this.route)
+      },
+      startConvertion() {
+        getConvertion();
+      }
+    }
+  });
+</script>
+
+</html>

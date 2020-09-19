@@ -1,19 +1,36 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {
+  app,
+  BrowserWindow
+} = require('electron')
 const path = require('path')
 
-function createWindow () {
+var childProcess = require("child_process");
+var oldSpawn = childProcess.spawn;
+
+function mySpawn() {
+  console.log('spawn called');
+  console.log(arguments);
+  var result = oldSpawn.apply(this, arguments);
+  return result;
+}
+childProcess.spawn = mySpawn;
+
+function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
+    width: 1024,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
+      nodeIntegration: true
+    },
+    autoHideMenuBar: true
   })
 
-  // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+
+  mainWindow.loadFile('gui/index.html')
+
+  mainWindow.menuBarVisible = false;
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -24,7 +41,7 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow()
-  
+
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.

@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start",
+  "name": "YT-blk",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Download Music from YouTube on Bulk",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
@@ -14,9 +14,12 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "Jorge Sidgo Pimentel",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^9.1.2"
+  },
+  "dependencies": {
+    "python-shell": "^2.0.1"
   }
 }
